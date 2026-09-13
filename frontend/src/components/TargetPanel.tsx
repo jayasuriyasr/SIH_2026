@@ -12,14 +12,14 @@ interface TargetPanelProps {
 function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div className="mb-3">
-      <div className="flex justify-between text-xs mb-1">
-        <span className="text-gray-400">{label}</span>
+      <div className="flex justify-between text-xs mb-1.5 font-medium">
+        <span className="text-gray-400 tracking-wide">{label}</span>
         <span className="font-mono" style={{ color }}>{(value * 100).toFixed(1)}%</span>
       </div>
-      <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: `${color}22` }}>
+      <div className="w-full h-2 rounded-full overflow-hidden bg-black/30 shadow-inner border border-white/5">
         <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{ width: `${Math.min(100, Math.max(0, value * 100))}%`, backgroundColor: color }}
+          className="h-full rounded-full transition-all duration-700"
+          style={{ width: `${Math.min(100, Math.max(0, value * 100))}%`, backgroundColor: color, boxShadow: `0 0 10px ${color}` }}
         />
       </div>
     </div>
@@ -41,30 +41,31 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
   ];
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: '#0f2035' }}>
+    <div className="h-full flex flex-col bg-transparent">
       {/* Header */}
-      <div className="p-4 border-b border-gray-700">
+      <div className="p-5 border-b border-white/10 bg-black/20">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white">{detection.target_id}</h2>
-            <p className="text-xs text-blue-400 uppercase tracking-wider font-semibold">
+            <h2 className="text-xl font-bold text-white font-heading text-glow">{detection.target_id}</h2>
+            <p className="text-xs text-cyan-400 uppercase tracking-wider font-semibold mt-0.5">
               {detection.object_class.replace('_', ' ')}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl leading-none p-1 cursor-pointer"
+            className="text-gray-400 hover:text-white text-2xl leading-none p-1 cursor-pointer transition-colors"
           >
             &times;
           </button>
         </div>
-        <div className="mt-2 flex items-center gap-2">
+        <div className="mt-4 flex items-center gap-2">
           <span
-            className="inline-block px-3 py-1 rounded-full text-xs font-bold"
+            className="inline-block px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm"
             style={{
-              backgroundColor: `${riskColor}22`,
+              backgroundColor: `${riskColor}20`,
               color: riskColor,
-              border: `1px solid ${riskColor}44`,
+              border: `1px solid ${riskColor}50`,
+              boxShadow: `0 0 10px ${riskColor}30`
             }}
           >
             {RISK_LABELS[riskLevel]} (Priority #{risk_assessment?.priority || 1})
@@ -73,30 +74,30 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
       </div>
 
       {/* Target Sonar Crop Preview */}
-      <div className="p-4 border-b border-gray-700">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+      <div className="p-5 border-b border-white/10">
+        <h3 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Acoustic Crop Signature
         </h3>
         <div
           onClick={() => onViewSonar && onViewSonar(target)}
-          className="relative rounded-lg overflow-hidden border border-gray-700 hover:border-blue-500 cursor-pointer group bg-black aspect-video flex items-center justify-center"
+          className="relative rounded-xl overflow-hidden border border-white/10 hover:border-cyan-400 cursor-pointer group bg-black/60 aspect-video flex items-center justify-center shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(0,240,255,0.2)] transition-all duration-300"
         >
           <img
             src={`/api/detections/${detection.detection_id}/crop`}
             alt={`Sonar crop for ${detection.target_id}`}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
             onError={(e) => {
               (e.target as HTMLElement).style.display = 'none';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-[10px] text-blue-300 font-medium">Click to inspect full waterfall sonar</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-xs text-cyan-300 font-semibold tracking-wide">Click to inspect full waterfall sonar</span>
           </div>
         </div>
       </div>
 
       {/* Scores */}
-      <div className="p-4 border-b border-gray-700">
+      <div className="p-5 border-b border-white/10">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Multi-Source Acoustic Scoring
         </h3>
@@ -120,44 +121,44 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
 
       {/* Acoustic Features */}
       {acoustic_features && (
-        <div className="p-4 border-b border-gray-700">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+        <div className="p-5 border-b border-white/10">
+          <h3 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Acoustic Feature Extraction
           </h3>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Target Intensity</div>
-              <div className="font-mono text-white">
-                {acoustic_features.target_intensity.toFixed(1)} / 255
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Target Intensity</div>
+              <div className="font-mono text-cyan-100 font-semibold">
+                {acoustic_features.target_intensity.toFixed(1)} <span className="text-gray-600">/ 255</span>
               </div>
             </div>
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Target Pixel Area</div>
-              <div className="font-mono text-white">
-                {acoustic_features.target_area.toFixed(0)} px²
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Target Area</div>
+              <div className="font-mono text-cyan-100 font-semibold">
+                {acoustic_features.target_area.toFixed(0)} <span className="text-gray-600">px²</span>
               </div>
             </div>
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Acoustic Shadow Length</div>
-              <div className="font-mono text-white">
-                {acoustic_features.shadow_length.toFixed(1)} px
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Shadow Length</div>
+              <div className="font-mono text-cyan-100 font-semibold">
+                {acoustic_features.shadow_length.toFixed(1)} <span className="text-gray-600">px</span>
               </div>
             </div>
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Shadow Area</div>
-              <div className="font-mono text-white">
-                {acoustic_features.shadow_area.toFixed(0)} px²
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Shadow Area</div>
+              <div className="font-mono text-cyan-100 font-semibold">
+                {acoustic_features.shadow_area.toFixed(0)} <span className="text-gray-600">px²</span>
               </div>
             </div>
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Target/Shadow Ratio</div>
-              <div className="font-mono text-white">
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Target/Shadow</div>
+              <div className="font-mono text-cyan-100 font-semibold">
                 {acoustic_features.target_shadow_ratio.toFixed(2)}
               </div>
             </div>
-            <div className="bg-gray-800/50 rounded p-2 border border-gray-700/50">
-              <div className="text-gray-500">Seabed Texture (Std)</div>
-              <div className="font-mono text-white">
+            <div className="bg-black/20 rounded-lg p-2.5 border border-white/5 shadow-inner">
+              <div className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">Seabed Texture</div>
+              <div className="font-mono text-cyan-100 font-semibold">
                 {acoustic_features.seabed_texture.toFixed(2)}
               </div>
             </div>
@@ -166,7 +167,7 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
       )}
 
       {/* Score Chart */}
-      <div className="p-4 border-b border-gray-700">
+      <div className="p-5 border-b border-white/10">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Evidence Distribution
         </h3>
@@ -189,26 +190,26 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
       </div>
 
       {/* Location */}
-      <div className="p-4 border-b border-gray-700">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+      <div className="p-5 border-b border-white/10">
+        <h3 className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Geo-Localization & Bathymetry
         </h3>
-        <div className="text-sm space-y-1">
-          <div className="flex justify-between">
-            <span className="text-gray-400">Latitude</span>
-            <span className="font-mono text-white">
+        <div className="text-sm space-y-2">
+          <div className="flex justify-between items-center bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
+            <span className="text-gray-400 text-xs">Latitude</span>
+            <span className="font-mono text-cyan-100">
               {detection.latitude ? `${detection.latitude.toFixed(6)}° N` : 'N/A'}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Longitude</span>
-            <span className="font-mono text-white">
+          <div className="flex justify-between items-center bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
+            <span className="text-gray-400 text-xs">Longitude</span>
+            <span className="font-mono text-cyan-100">
               {detection.longitude ? `${detection.longitude.toFixed(6)}° E` : 'N/A'}
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Seabed Depth</span>
-            <span className="font-mono text-white">
+          <div className="flex justify-between items-center bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
+            <span className="text-gray-400 text-xs">Seabed Depth</span>
+            <span className="font-mono text-cyan-100">
               {detection.depth != null ? `${detection.depth.toFixed(1)} meters` : 'N/A'}
             </span>
           </div>
@@ -216,19 +217,17 @@ export default function TargetPanel({ target, onClose, onVerify, onViewSonar }: 
       </div>
 
       {/* Actions */}
-      <div className="p-4 mt-auto">
-        <div className="flex gap-2">
+      <div className="p-5 mt-auto bg-black/20">
+        <div className="flex gap-3">
           <button
             onClick={() => onViewSonar && onViewSonar(target)}
-            className="flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold text-white transition-colors cursor-pointer hover:bg-blue-700"
-            style={{ backgroundColor: '#1b3a5e' }}
+            className="flex-1 px-4 py-3 rounded-xl text-xs font-bold text-white transition-all cursor-pointer hover:-translate-y-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_25px_rgba(0,240,255,0.4)]"
           >
             Full Sonar View
           </button>
           <button
             onClick={() => onVerify(detection.detection_id)}
-            className="flex-1 px-3 py-2.5 rounded-lg text-xs font-semibold text-white transition-colors cursor-pointer hover:bg-emerald-700"
-            style={{ backgroundColor: '#155e3a' }}
+            className="flex-1 px-4 py-3 rounded-xl text-xs font-bold text-white transition-all cursor-pointer hover:-translate-y-0.5 bg-gradient-to-r from-emerald-600 to-teal-500 shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)]"
           >
             Verify Target
           </button>

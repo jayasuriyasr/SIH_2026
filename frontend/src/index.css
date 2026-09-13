@@ -1,24 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --color-ocean-900: #0a1628;
-  --color-ocean-800: #0f2035;
-  --color-ocean-700: #152d4a;
-  --color-ocean-600: #1b3a5e;
-  --color-ocean-500: #214f7a;
-  --color-ocean-400: #3b7dd8;
-  --color-ocean-300: #60a5fa;
-  --color-ocean-200: #93c5fd;
-  --color-ocean-100: #dbeafe;
+  /* Premium Dark Theme Core Palette */
+  --color-ocean-900: #040b16; /* Deeper background */
+  --color-ocean-800: #0a1628;
+  --color-ocean-700: #0f223a;
+  --color-ocean-600: #143050;
+  --color-ocean-500: #1d4572;
+  --color-ocean-400: #2d65a8;
+  --color-ocean-300: #428be0;
+  --color-ocean-200: #7eb6f2;
+  --color-ocean-100: #cce3fc;
 
-  --color-risk-high: #ef4444;
-  --color-risk-medium: #f59e0b;
-  --color-risk-low: #22c55e;
-
+  /* Risk/Accent Colors - Neons */
+  --color-risk-high: #ff3b5c;
+  --color-risk-medium: #ffb833;
+  --color-risk-low: #00e676;
+  
   --color-sonar-green: #00ff88;
   --color-sonar-blue: #0088ff;
   --color-sonar-amber: #ffaa00;
+  --color-neon-cyan: #00f0ff;
+  --color-neon-purple: #b300ff;
 }
 
 * {
@@ -31,63 +36,97 @@ html, body, #root {
   height: 100%;
   width: 100%;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--color-ocean-900);
+  background: radial-gradient(circle at top right, var(--color-ocean-800), var(--color-ocean-900));
   color: #e2e8f0;
+}
+
+/* Headings use Outfit */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Outfit', sans-serif;
 }
 
 .leaflet-container {
   height: 100%;
   width: 100%;
-  background: #0a1628;
+  background: var(--color-ocean-900);
 }
 
-/* Custom scrollbar for dark theme */
+/* Custom premium scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ocean-800);
+  background: rgba(10, 22, 40, 0.5);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ocean-500);
-  border-radius: 3px;
+  background: rgba(45, 101, 168, 0.5);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ocean-400);
+  background: rgba(66, 139, 224, 0.8);
 }
 
-/* Risk badge colors */
-.risk-high { background-color: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
-.risk-medium { background-color: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
-.risk-low { background-color: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(15, 34, 58, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+/* Risk badge colors (updated for premium look) */
+.risk-high { background: linear-gradient(135deg, rgba(255,59,92,0.2), rgba(255,59,92,0.05)); color: #ff8aa0; border: 1px solid rgba(255, 59, 92, 0.4); box-shadow: 0 0 10px rgba(255, 59, 92, 0.2); }
+.risk-medium { background: linear-gradient(135deg, rgba(255,184,51,0.2), rgba(255,184,51,0.05)); color: #ffe099; border: 1px solid rgba(255, 184, 51, 0.4); box-shadow: 0 0 10px rgba(255, 184, 51, 0.2); }
+.risk-low { background: linear-gradient(135deg, rgba(0,230,118,0.2), rgba(0,230,118,0.05)); color: #80f2b9; border: 1px solid rgba(0, 230, 118, 0.4); box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
 
 /* Pulse animation for high-risk markers */
 @keyframes pulse-ring {
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; }
+  0% { transform: scale(0.8); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.7); }
+  100% { transform: scale(2.5); opacity: 0; box-shadow: 0 0 0 15px rgba(255, 59, 92, 0); }
 }
 .pulse-ring {
-  animation: pulse-ring 1.5s ease-out infinite;
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
-/* Dark Leaflet Popup Styling */
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Dark Leaflet Popup Styling - Glass effect */
 .dark-popup .leaflet-popup-content-wrapper {
-  background: #0f2035 !important;
+  background: rgba(10, 22, 40, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
   color: #f1f5f9 !important;
-  border: 1px solid #1b3a5e !important;
+  border: 1px solid rgba(66, 139, 224, 0.3) !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(66, 139, 224, 0.2) !important;
   padding: 4px !important;
 }
 .dark-popup .leaflet-popup-tip {
-  background: #0f2035 !important;
-  border: 1px solid #1b3a5e !important;
+  background: rgba(10, 22, 40, 0.85) !important;
+  border: 1px solid rgba(66, 139, 224, 0.3) !important;
 }
 .dark-popup .leaflet-popup-close-button {
   color: #94a3b8 !important;
   top: 8px !important;
   right: 8px !important;
+  text-shadow: none !important;
+  transition: color 0.2s, text-shadow 0.2s !important;
 }
 .dark-popup .leaflet-popup-close-button:hover {
-  color: #f8fafc !important;
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px #00f0ff !important;
 }

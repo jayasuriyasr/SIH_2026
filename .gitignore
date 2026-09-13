@@ -1,0 +1,42 @@
+# Environment environments
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database
+sonaris.db
+*.sqlite3
+
+# Models and Weights
+*.pt
+*.onnx
+*.npy
+*.pth
+models/
+backend/weights/*.pt
+backend/weights/*.npy
+
+# Data and Artifacts
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# YOLOv8 Training Runs
+runs/
+
+# Logs and temporary files
+*.log
+.DS_Store
+scratch/
+
+# IDE and Editor
+.vscode/
+.idea/
+.gemini/
+
+# Note: The frontend directory has its own .gitignore for node_modules and dist.

@@ -131,69 +131,67 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: '#0a1628' }}>
+    <div className="h-full flex flex-col bg-transparent">
       {/* Top Bar */}
       <header
-        className="h-14 flex items-center justify-between px-5 border-b flex-shrink-0"
-        style={{ backgroundColor: '#0f2035', borderColor: '#1b3a5e' }}
+        className="h-16 flex items-center justify-between px-6 pl-10 border-b border-white/10 flex-shrink-0 glass-panel z-30 relative"
       >
         <div className="flex items-center gap-3">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shadow-md"
-            style={{ backgroundColor: '#1b3a5e', color: '#60a5fa' }}
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-heading font-bold shadow-lg shadow-cyan-500/20 bg-gradient-to-br from-blue-600 to-cyan-500 text-white border border-white/10"
           >
             SA
           </div>
           <div>
-            <h1 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+            <h1 className="text-sm font-bold text-white tracking-wider font-heading flex items-center gap-2">
               <span>SONARIS AI</span>
-              <span className="text-[10px] px-2 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                 ACTIVE
               </span>
             </h1>
-            <p className="text-[10px] text-gray-400">Side-Scan Sonar Marine Debris & Risk Prioritization Engine</p>
+            <p className="text-[10.5px] text-gray-400">Side-Scan Sonar Marine Debris & Risk Prioritization Engine</p>
           </div>
         </div>
 
         {/* Stats Summary Bar */}
         {stats && (
-          <div className="hidden md:flex items-center gap-6 text-xs bg-slate-900/60 px-4 py-1.5 rounded-lg border border-slate-800">
+          <div className="hidden md:flex items-center gap-6 text-xs glass-panel shadow-inner shadow-black/50 px-5 py-2 rounded-xl border border-white/5">
             <div className="text-center">
-              <div className="text-gray-400 text-[10px]">Surveys</div>
-              <div className="text-white font-bold text-sm">{stats.total_surveys}</div>
+              <div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">Surveys</div>
+              <div className="text-white font-bold text-base font-heading text-glow">{stats.total_surveys}</div>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
+            <div className="h-8 w-px bg-white/10" />
             <div className="text-center">
-              <div className="text-gray-400 text-[10px]">Targets</div>
-              <div className="text-white font-bold text-sm">{stats.total_detections}</div>
+              <div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">Targets</div>
+              <div className="text-white font-bold text-base font-heading text-glow">{stats.total_detections}</div>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
+            <div className="h-8 w-px bg-white/10" />
             <div
-              className="text-center cursor-pointer hover:opacity-80"
+              className="text-center cursor-pointer hover:-translate-y-0.5 transition-transform"
               onClick={() => setRiskFilter(riskFilter === 'HIGH' ? 'ALL' : 'HIGH')}
             >
-              <div className="text-gray-400 text-[10px]">High Risk</div>
-              <div className="font-bold text-sm" style={{ color: RISK_COLORS.HIGH }}>
+              <div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">High Risk</div>
+              <div className="font-bold text-base font-heading text-glow" style={{ color: RISK_COLORS.HIGH }}>
                 {stats.high_risk_count}
               </div>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
+            <div className="h-8 w-px bg-white/10" />
             <div
-              className="text-center cursor-pointer hover:opacity-80"
+              className="text-center cursor-pointer hover:-translate-y-0.5 transition-transform"
               onClick={() => setRiskFilter(riskFilter === 'MEDIUM' ? 'ALL' : 'MEDIUM')}
             >
-              <div className="text-gray-400 text-[10px]">Medium</div>
-              <div className="font-bold text-sm" style={{ color: RISK_COLORS.MEDIUM }}>
+              <div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">Medium</div>
+              <div className="font-bold text-base font-heading text-glow" style={{ color: RISK_COLORS.MEDIUM }}>
                 {stats.medium_risk_count}
               </div>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
+            <div className="h-8 w-px bg-white/10" />
             <div
-              className="text-center cursor-pointer hover:opacity-80"
+              className="text-center cursor-pointer hover:-translate-y-0.5 transition-transform"
               onClick={() => setRiskFilter(riskFilter === 'LOW' ? 'ALL' : 'LOW')}
             >
-              <div className="text-gray-400 text-[10px]">Low</div>
-              <div className="font-bold text-sm" style={{ color: RISK_COLORS.LOW }}>
+              <div className="text-gray-400 text-[10px] uppercase tracking-wider mb-0.5">Low</div>
+              <div className="font-bold text-base font-heading text-glow" style={{ color: RISK_COLORS.LOW }}>
                 {stats.low_risk_count}
               </div>
             </div>
@@ -201,17 +199,17 @@ export default function Dashboard() {
         )}
 
         {/* Dashboard Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {/* Risk Filter Select */}
-          <div className="flex items-center bg-gray-900/80 rounded-lg p-0.5 border border-gray-700 text-xs">
+          <div className="flex items-center gap-1 glass-panel rounded-lg p-1 border border-white/5 text-xs shadow-inner shadow-black/20">
             {(['ALL', 'HIGH', 'MEDIUM', 'LOW'] as const).map((lvl) => (
               <button
                 key={lvl}
                 onClick={() => setRiskFilter(lvl)}
-                className={`px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-md text-[11px] font-semibold transition-all duration-300 cursor-pointer tracking-wider ${
                   riskFilter === lvl
-                    ? 'bg-blue-600 text-white font-semibold shadow'
-                    : 'text-gray-400 hover:text-gray-200'
+                    ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-[0_0_10px_rgba(0,240,255,0.3)]'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 {lvl}
@@ -221,10 +219,10 @@ export default function Dashboard() {
 
           <button
             onClick={() => setShowHeatmap(!showHeatmap)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 cursor-pointer border ${
               showHeatmap
-                ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 shadow-sm'
-                : 'bg-gray-800/80 text-gray-400 border-gray-700 hover:border-gray-500'
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] text-glow'
+                : 'glass-panel text-gray-400 hover:text-white hover:border-white/20'
             }`}
           >
             Anomaly Heatmap
@@ -232,10 +230,10 @@ export default function Dashboard() {
 
           <button
             onClick={() => setShowPriority(!showPriority)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-300 cursor-pointer border ${
               showPriority
-                ? 'bg-blue-500/20 text-blue-400 border-blue-500/40 shadow-sm'
-                : 'bg-gray-800/80 text-gray-400 border-gray-700 hover:border-gray-500'
+                ? 'bg-blue-500/20 text-cyan-300 border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)] text-glow'
+                : 'glass-panel text-gray-400 hover:text-white hover:border-white/20'
             }`}
           >
             Priority Queue
@@ -245,14 +243,14 @@ export default function Dashboard() {
           <a
             href="/api/export/csv"
             download
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-800/80 text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-xs font-semibold glass-panel text-gray-300 hover:border-white/20 hover:text-white transition-all cursor-pointer shadow-lg"
           >
             Export CSV
           </a>
 
           <button
             onClick={handleExportMissionPlan}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/80 transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:-translate-y-0.5 transition-all cursor-pointer border border-teal-400/30"
           >
             AUV Mission Plan
           </button>
@@ -273,21 +271,21 @@ export default function Dashboard() {
 
           {/* Quick empty state prompt if no surveys */}
           {(!geojson || geojson.features.length === 0) && !loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-30">
-              <div className="bg-slate-900/90 border border-blue-500/30 p-6 rounded-2xl max-w-md text-center shadow-2xl backdrop-blur-md">
-                <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-xl">
-                  ⚓
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-30">
+              <div className="glass-panel border-cyan-500/30 p-8 rounded-2xl max-w-lg text-center shadow-[0_0_40px_rgba(0,240,255,0.15)] animate-float">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-5 text-3xl border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                  🌊
                 </div>
-                <h3 className="text-base font-bold text-white mb-2">No Active Sonar Surveys Loaded</h3>
-                <p className="text-xs text-gray-400 mb-5">
+                <h3 className="text-xl font-bold text-white mb-3 font-heading text-glow">No Active Sonar Surveys</h3>
+                <p className="text-sm text-gray-400 mb-8 leading-relaxed">
                   Generate realistic side-scan sonar demo surveys (Arabian Sea, Palk Strait, Kochi Harbor) with full AI evidence fusion and risk prioritization.
                 </p>
                 <button
                   onClick={handleGenerateDemo}
                   disabled={isGeneratingDemo}
-                  className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-lg cursor-pointer disabled:opacity-50"
+                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-sm transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] cursor-pointer disabled:opacity-50 disabled:shadow-none font-heading tracking-wide"
                 >
-                  {isGeneratingDemo ? 'Simulating Acoustic Surveys...' : 'Generate Demo SSS Surveys'}
+                  {isGeneratingDemo ? 'Simulating Acoustic Surveys...' : '⚡ Generate Demo SSS Surveys'}
                 </button>
               </div>
             </div>
@@ -295,10 +293,10 @@ export default function Dashboard() {
 
           {/* Loading overlay */}
           {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-50">
-              <div className="text-center bg-slate-900/90 p-5 rounded-2xl border border-slate-800 shadow-xl backdrop-blur-md">
-                <div className="w-9 h-9 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-                <div className="text-xs text-gray-300 font-medium">Computing Multi-Source Evidence Fusion...</div>
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-[9999]">
+              <div className="text-center glass-panel p-6 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] border-blue-500/30">
+                <div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4 shadow-[0_0_15px_rgba(0,240,255,0.5)]" />
+                <div className="text-sm text-cyan-100 font-semibold tracking-wide font-heading">Computing Evidence Fusion...</div>
               </div>
             </div>
           )}
@@ -307,10 +305,9 @@ export default function Dashboard() {
         {/* Right Sidebar — Priority Queue */}
         {showPriority && (
           <div
-            className="w-72 flex-shrink-0 border-l flex flex-col"
-            style={{ backgroundColor: '#0f2035', borderColor: '#1b3a5e' }}
+            className="w-80 flex-shrink-0 border-l border-white/10 flex flex-col glass-panel z-10 relative"
           >
-            <div className="p-3 border-b flex items-center justify-between" style={{ borderColor: '#1b3a5e' }}>
+            <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/20">
               <div>
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                   Inspection Priority
@@ -338,8 +335,7 @@ export default function Dashboard() {
         {/* Left Sidebar — Target Detail */}
         {selectedTarget && (
           <div
-            className="w-84 flex-shrink-0 border-l overflow-y-auto"
-            style={{ backgroundColor: '#0f2035', borderColor: '#1b3a5e' }}
+            className="w-96 flex-shrink-0 border-l border-white/10 overflow-y-auto glass-panel z-20 relative shadow-[-10px_0_30px_rgba(0,0,0,0.5)]"
           >
             <TargetPanel
               target={selectedTarget}

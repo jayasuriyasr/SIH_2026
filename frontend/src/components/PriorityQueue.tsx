@@ -17,8 +17,8 @@ export default function PriorityQueue({ targets, onSelect, selectedId }: Priorit
   }
 
   return (
-    <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
-      <div className="p-3 space-y-2">
+    <div className="overflow-y-auto h-full pb-4">
+      <div className="p-4 space-y-3">
         {targets.map((target) => {
           const riskColor = RISK_COLORS[target.risk_level];
           const isActive = target.detection_id === selectedId;
@@ -27,10 +27,10 @@ export default function PriorityQueue({ targets, onSelect, selectedId }: Priorit
             <button
               key={target.detection_id}
               onClick={() => onSelect(target.detection_id)}
-              className={`w-full text-left p-3 rounded-lg border transition-all ${
+              className={`w-full text-left p-3.5 rounded-xl border transition-all duration-300 group ${
                 isActive
-                  ? 'border-blue-500/50 bg-blue-500/10'
-                  : 'border-gray-700/50 bg-gray-800/30 hover:bg-gray-800/60 hover:border-gray-600/50'
+                  ? 'border-cyan-500/50 bg-cyan-500/10 shadow-[0_0_15px_rgba(0,240,255,0.15)] scale-[1.02]'
+                  : 'glass-panel hover:bg-white/5 hover:border-white/20 hover:-translate-y-0.5 hover:shadow-lg'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -45,15 +45,16 @@ export default function PriorityQueue({ targets, onSelect, selectedId }: Priorit
                   {target.priority}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-white truncate">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-sm font-bold text-white font-heading tracking-wide truncate group-hover:text-cyan-300 transition-colors">
                       {target.target_id}
                     </span>
                     <span
-                      className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+                      className="text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider"
                       style={{
-                        backgroundColor: `${riskColor}22`,
+                        backgroundColor: `${riskColor}20`,
                         color: riskColor,
+                        border: `1px solid ${riskColor}40`
                       }}
                     >
                       {target.risk_level}
