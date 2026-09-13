@@ -45,9 +45,39 @@ def compute_shadow_features(image: np.ndarray, target_mask: np.ndarray) -> dict:
     cy = int(M["m01"] / M["m00"])
 
     x, y, bw, bh = cv2.boundingRect(largest)
-    angle_rad = np.radians(45)
-    offset_x = int(bh * np.cos(angle_rad))
-    offset_y = int(bh * np.sin(angle_rad))
+    
+    # --- Scientific Validity Fix: Dynamic Shadow Geometry ---
+    # Side-scan sonar shadow length depends on target height, altitude, and range.
+    # Assume nadir (sonar track) is exactly at the center of the image (w/2).
+    nadir_x = w / 2.0
+    
+    # Distance from nadir in pixels
+    dist_from_nadir = abs(cx - nadir_x)
+    
+    # Heuristic sonar parameters for dynamic calculation
+    # Assume max range (w/2 pixels) corresponds to 100 meters, altitude is 15 meters
+    max_range_m = 100.0
+    altitude_m = 15.0
+    
+    range_m = (dist_from_nadir / (w / 2.0)) * max_range_m
+    range_m = max(range_m, 1.0)  # Prevent zero range
+    
+    # Angle of incidence theta = arctan(Range / Altitude)
+    theta_rad = np.arctan(range_m / altitude_m)
+    
+    # The shadow length scale factor is proportional to tan(theta)
+    shadow_scale = np.tan(theta_rad)
+    
+    # Shadow offset vector magnitude (proportional to target height `bh`)
+    shadow_magnitude = bh * shadow_scale
+    
+    # Shadow always points away from the nadir line.
+    direction_sign = 1 if cx >= nadir_x else -1
+    
+    # Assuming towfish moves vertically, shadow projects purely across-track (horizontally)
+    offset_x = int(shadow_magnitude * direction_sign)
+    offset_y = 0
+    # -----------------------------------------------------------
 
     shadow_pts = largest.copy()
     shadow_pts[:, :, 0] += offset_x

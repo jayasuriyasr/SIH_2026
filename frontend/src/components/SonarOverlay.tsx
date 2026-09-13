@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Detection } from '../types';
 
 interface SonarOverlayProps {
@@ -15,8 +16,8 @@ export default function SonarOverlay({ detection, onClose }: SonarOverlayProps) 
   const { bbox, image_path, object_class, confidence, target_id } = detection;
   const imgSrc = image_path || `/api/detections/${detection.detection_id}/crop`;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 99999 }}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
       <div
         className="relative rounded-2xl shadow-2xl max-w-3xl w-full mx-auto overflow-hidden flex flex-col max-h-[92vh] border"
@@ -139,6 +140,7 @@ export default function SonarOverlay({ detection, onClose }: SonarOverlayProps) 
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

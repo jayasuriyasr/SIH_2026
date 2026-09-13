@@ -280,9 +280,15 @@ SIH/
 │   ├── processed/                  # Preprocessed images
 │   └── sample_survey/              # Demo survey data
 ├── scripts/
-│   ├── run_pipeline.py             # Run full pipeline on demo data
-│   ├── preprocess_data.py          # Batch preprocess sonar images
-│   └── train_yolo.py               # Train detection/segmentation models
+│   ├── pipeline/
+│   │   ├── run_pipeline.py             # Run full pipeline on demo data
+│   │   └── ingest_real_images.py       # Ingest real sonar dataset
+│   ├── data_prep/
+│   │   └── preprocess_data.py          # Batch preprocess sonar images
+│   ├── training_eval/
+│   │   └── train_yolo.py               # Train detection/segmentation models
+│   └── utils/
+│       └── generate_memory_bank.py     # Generate PatchCore memory bank
 ├── models/                         # Training outputs (weights, logs)
 ├── sonaris.db                      # SQLite database (auto-created)
 ├── SONARISAI.md                    # Full architecture document
@@ -391,16 +397,16 @@ Open **http://localhost:5173** in your browser.
 
 ```bash
 # Process demo survey (images in data/raw/demo_survey/)
-python scripts/run_pipeline.py --action demo
+python scripts/pipeline/run_pipeline.py --action demo
 
 # Just load images without processing
-python scripts/run_pipeline.py --action load
+python scripts/pipeline/run_pipeline.py --action load
 ```
 
 ### Run Preprocessing
 
 ```bash
-python scripts/preprocess_data.py --raw data/raw --output data/processed
+python scripts/data_prep/preprocess_data.py --raw data/raw --output data/processed
 ```
 
 ---
@@ -666,10 +672,10 @@ Run the full AI pipeline on demo data.
 
 ```bash
 # Process images in data/raw/demo_survey/
-python scripts/run_pipeline.py --action demo
+python scripts/pipeline/run_pipeline.py --action demo
 
 # Load images into a survey without processing
-python scripts/run_pipeline.py --action load
+python scripts/pipeline/run_pipeline.py --action load
 ```
 
 ### `preprocess_data.py`
@@ -677,7 +683,7 @@ python scripts/run_pipeline.py --action load
 Batch preprocess sonar images through the enhancement pipeline.
 
 ```bash
-python scripts/preprocess_data.py --raw data/raw --output data/processed
+python scripts/data_prep/preprocess_data.py --raw data/raw --output data/processed
 ```
 
 ### `train_yolo.py`
@@ -686,13 +692,13 @@ Train YOLOv8 models on custom sonar data.
 
 ```bash
 # Train both detection and segmentation
-python scripts/train_yolo.py --data path/to/data.yaml --epochs 100
+python scripts/training_eval/train_yolo.py --data path/to/data.yaml --epochs 100
 
 # Train detection only
-python scripts/train_yolo.py --data path/to/data.yaml --mode detect --epochs 50
+python scripts/training_eval/train_yolo.py --data path/to/data.yaml --mode detect --epochs 50
 
 # Train with smaller image size (for 4GB VRAM GPUs)
-python scripts/train_yolo.py --data path/to/data.yaml --imgsz 416 --batch 2
+python scripts/training_eval/train_yolo.py --data path/to/data.yaml --imgsz 416 --batch 2
 ```
 
 Training uses:
@@ -792,7 +798,7 @@ For small datasets, use aggressive augmentation:
 ### Training on RTX 3050 (4GB VRAM)
 
 ```bash
-python scripts/train_yolo.py \
+python scripts/training_eval/train_yolo.py \
   --data data.yaml \
   --epochs 100 \
   --imgsz 640 \
@@ -801,7 +807,7 @@ python scripts/train_yolo.py \
 
 If you encounter CUDA OOM:
 ```bash
-python scripts/train_yolo.py \
+python scripts/training_eval/train_yolo.py \
   --data data.yaml \
   --epochs 100 \
   --imgsz 416 \

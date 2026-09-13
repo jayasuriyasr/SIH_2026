@@ -27,9 +27,8 @@ def main():
         init_db()
         db = SessionLocal()
         if db.query(Survey).count() == 0:
-            print("      Synthesizing initial realistic sonar survey datasets...")
-            api_generate_demo_surveys()
-            print("      Seeding complete.")
+            print("      Database is empty. Skipping synthetic demo surveys as per user request.")
+            pass
         db.close()
     except Exception as e:
         print(f"      Startup check notice: {e}")

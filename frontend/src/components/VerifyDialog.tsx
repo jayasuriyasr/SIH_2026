@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface VerifyDialogProps {
   detectionId: string | null;
@@ -36,23 +37,22 @@ export default function VerifyDialog({ detectionId, onClose, onSubmit }: VerifyD
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+  return createPortal(
+    <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 99999 }}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
 
       {/* Dialog */}
       <div
-        className="relative rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden"
-        style={{ backgroundColor: '#0f2035', border: '1px solid #1b3a5e' }}
+        className="relative rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full max-w-md mx-4 overflow-hidden glass-panel border border-cyan-500/20"
       >
         {/* Header */}
-        <div className="p-4 border-b border-gray-700">
+        <div className="p-5 border-b border-white/10 bg-black/20">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Verify Detection</h2>
+            <h2 className="text-xl font-bold text-white font-heading text-glow">Verify Detection</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white text-xl leading-none"
+              className="text-gray-400 hover:text-white text-2xl leading-none transition-colors"
             >
               &times;
             </button>
@@ -62,20 +62,32 @@ export default function VerifyDialog({ detectionId, onClose, onSubmit }: VerifyD
           </p>
         </div>
 
+        {/* Target Image Crop */}
+        <div className="p-5 border-b border-white/10 bg-black/40 flex justify-center items-center h-48">
+          <img 
+            src={`/api/detections/${detectionId}/crop`} 
+            alt={`Target ${detectionId}`}
+            className="max-w-full max-h-full object-contain rounded-lg border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+        </div>
+
         {/* Label Selection */}
-        <div className="p-4">
-          <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2">
+        <div className="p-5">
+          <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-3">
             Classification
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {LABELS.map((label) => (
               <button
                 key={label.value}
                 onClick={() => setSelectedLabel(label.value)}
-                className={`p-2 rounded-lg text-sm text-left transition-all border ${
+                className={`p-3 rounded-xl text-sm font-semibold text-left transition-all duration-300 border ${
                   selectedLabel === label.value
-                    ? 'border-opacity-50 bg-opacity-15'
-                    : 'border-gray-700 bg-gray-800/30 hover:bg-gray-800/60'
+                    ? 'border-opacity-100 shadow-md'
+                    : 'border-white/5 bg-white/5 hover:bg-white/10'
                 }`}
                 style={
                   selectedLabel === label.value
@@ -101,8 +113,8 @@ export default function VerifyDialog({ detectionId, onClose, onSubmit }: VerifyD
 
         {/* Correction (if incorrect/new) */}
         {(selectedLabel === 'incorrect' || selectedLabel === 'new_category') && (
-          <div className="px-4 pb-2">
-            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">
+          <div className="px-5 pb-3">
+            <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">
               Correct Label
             </label>
             <input
@@ -110,15 +122,14 @@ export default function VerifyDialog({ detectionId, onClose, onSubmit }: VerifyD
               value={correction}
               onChange={(e) => setCorrection(e.target.value)}
               placeholder="Enter correct classification..."
-              className="w-full px-3 py-2 rounded-lg text-sm text-white border border-gray-700 focus:border-blue-500 focus:outline-none"
-              style={{ backgroundColor: '#0a1628' }}
+              className="w-full px-4 py-2.5 rounded-xl text-sm text-white border border-white/10 focus:border-cyan-500 focus:outline-none bg-black/30 shadow-inner focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all"
             />
           </div>
         )}
 
         {/* Comments */}
-        <div className="px-4 pb-2">
-          <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-1">
+        <div className="px-5 pb-4">
+          <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">
             Comments
           </label>
           <textarea
@@ -126,29 +137,32 @@ export default function VerifyDialog({ detectionId, onClose, onSubmit }: VerifyD
             onChange={(e) => setComments(e.target.value)}
             placeholder="Optional notes..."
             rows={2}
-            className="w-full px-3 py-2 rounded-lg text-sm text-white border border-gray-700 focus:border-blue-500 focus:outline-none resize-none"
-            style={{ backgroundColor: '#0a1628' }}
+            className="w-full px-4 py-2.5 rounded-xl text-sm text-white border border-white/10 focus:border-cyan-500 focus:outline-none resize-none bg-black/30 shadow-inner focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all"
           />
         </div>
 
         {/* Footer */}
-        <div className="p-4 flex gap-2 justify-end">
+        <div className="p-5 flex gap-3 justify-end bg-black/20 border-t border-white/10">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 transition-colors"
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-400 hover:text-white glass-panel hover:border-white/20 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedLabel}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: selectedLabel ? '#155e3a' : '#1b3a5e' }}
+            className={`px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all duration-300 ${
+              selectedLabel
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer hover:-translate-y-0.5'
+                : 'glass-panel opacity-50 cursor-not-allowed'
+            }`}
           >
             Submit Verification
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

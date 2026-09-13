@@ -110,13 +110,13 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
   };
 
   return (
-    <div className="h-full overflow-y-auto p-6 md:p-8" style={{ backgroundColor: '#0a1628' }}>
+    <div className="h-full overflow-y-auto p-6 md:p-8 bg-transparent">
       <div className="max-w-5xl mx-auto pb-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-white mb-1 tracking-tight">Sonar Survey Mission Management</h1>
-            <p className="text-xs text-gray-400">
+            <h1 className="text-3xl font-bold text-white mb-1 tracking-tight font-heading text-glow">Sonar Survey Mission Management</h1>
+            <p className="text-sm text-gray-400">
               Ingest raw Side-Scan Sonar (SSS) datasets, execute multi-stage evidence fusion, and inspect targets.
             </p>
           </div>
@@ -125,11 +125,11 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
             <button
               onClick={handleGenerateDemo}
               disabled={generatingDemo}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all cursor-pointer disabled:opacity-50 disabled:shadow-none flex items-center gap-2 font-heading tracking-wide"
             >
               {generatingDemo ? (
                 <>
-                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   <span>Synthesizing Surveys...</span>
                 </>
               ) : (
@@ -143,8 +143,7 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
 
         {/* Upload Area */}
         <div
-          className="border-2 border-dashed rounded-2xl p-8 mb-8 text-center transition-all hover:border-blue-500/60 bg-slate-900/40 relative overflow-hidden"
-          style={{ borderColor: '#1b3a5e' }}
+          className="border-2 border-dashed rounded-3xl p-10 mb-10 text-center transition-all hover:border-cyan-400 glass-panel relative overflow-hidden group cursor-pointer"
         >
           <input
             type="file"
@@ -154,17 +153,18 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
             id="survey-upload"
             disabled={uploading}
           />
-          <label htmlFor="survey-upload" className="cursor-pointer block">
-            <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto mb-3 text-2xl border border-blue-500/30">
+          <label htmlFor="survey-upload" className="cursor-pointer block relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-4 text-3xl border border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.15)] group-hover:scale-110 transition-transform">
               {uploading ? '⏳' : '📥'}
             </div>
-            <div className="text-sm font-semibold text-white mb-1">
+            <div className="text-base font-bold text-white mb-2 font-heading tracking-wide">
               {uploading ? 'Uploading & Processing SSS Survey...' : 'Drop Side-Scan Sonar dataset here or browse files'}
             </div>
-            <div className="text-xs text-gray-400">
-              Accepts compressed surveys (<span className="text-blue-400">.zip</span>, <span className="text-blue-400">.tar.gz</span>) or individual sonar waterfall images (<span className="text-blue-400">.png</span>, <span className="text-blue-400">.jpg</span>, <span className="text-blue-400">.tif</span>)
+            <div className="text-sm text-gray-400">
+              Accepts compressed surveys (<span className="text-cyan-400 font-medium">.zip</span>, <span className="text-cyan-400 font-medium">.tar.gz</span>) or individual sonar waterfall images (<span className="text-cyan-400 font-medium">.png</span>, <span className="text-cyan-400 font-medium">.jpg</span>, <span className="text-cyan-400 font-medium">.tif</span>)
             </div>
           </label>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         </div>
 
         {/* Survey List */}
@@ -182,34 +182,30 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
           </div>
 
           {loading ? (
-            <div className="text-center py-16 text-gray-400">
-              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <div className="text-xs">Loading surveys...</div>
+            <div className="text-center py-16 text-gray-400 glass-panel rounded-2xl">
+              <div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4 shadow-[0_0_15px_rgba(0,240,255,0.5)]" />
+              <div className="text-sm font-semibold text-cyan-100 font-heading">Loading surveys...</div>
             </div>
           ) : surveys.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900/30 rounded-2xl border border-slate-800">
-              <div className="text-3xl mb-2">🌊</div>
-              <div className="text-sm font-medium text-gray-300 mb-1">No active surveys in database</div>
-              <div className="text-xs text-gray-500 mb-4">Upload a sonar file or generate demo missions to explore.</div>
+            <div className="text-center py-20 glass-panel rounded-3xl border-dashed">
+              <div className="text-5xl mb-4 opacity-70">🌊</div>
+              <div className="text-lg font-bold text-white mb-2 font-heading">No active surveys in database</div>
+              <div className="text-sm text-gray-400 mb-6 max-w-md mx-auto">Upload a sonar file or generate demo missions to explore full AI evidence fusion capabilities.</div>
               <button
                 onClick={handleGenerateDemo}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-sm font-bold cursor-pointer shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all font-heading tracking-wide"
               >
-                Generate Demo Surveys
+                ⚡ Generate Demo Surveys
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-5">
               {surveys.map((survey) => (
                 <div
                   key={survey.survey_id}
-                  className="rounded-2xl p-5 border transition-all hover:border-slate-600 shadow-lg"
-                  style={{
-                    backgroundColor: '#0f2035',
-                    borderColor: '#1b3a5e',
-                  }}
+                  className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 glass-panel hover:shadow-[0_10px_30px_rgba(0,240,255,0.1)] hover:border-cyan-500/30"
                 >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-base font-bold text-white tracking-wide">{survey.name}</h3>
@@ -248,13 +244,12 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
+                    <div className="flex items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 border-white/10 md:pl-4">
                       {survey.status === 'uploaded' && (
                         <button
                           onClick={() => handleProcess(survey.survey_id)}
                           disabled={processing === survey.survey_id}
-                          className="px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all disabled:opacity-50 cursor-pointer hover:bg-emerald-600"
-                          style={{ backgroundColor: '#155e3a' }}
+                          className="px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all disabled:opacity-50 cursor-pointer hover:scale-105 bg-gradient-to-r from-emerald-600 to-teal-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
                         >
                           {processing === survey.survey_id ? 'Processing...' : 'Run Pipeline'}
                         </button>
@@ -265,15 +260,14 @@ export default function SurveyView({ onProcess }: SurveyViewProps) {
                             onProcess(survey.survey_id);
                             navigate('/');
                           }}
-                          className="px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all cursor-pointer hover:bg-blue-600 shadow"
-                          style={{ backgroundColor: '#1b3a5e' }}
+                          className="px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all cursor-pointer hover:scale-105 shadow-[0_0_15px_rgba(0,136,255,0.3)] bg-gradient-to-r from-blue-600 to-blue-500"
                         >
                           Explore GIS View &rarr;
                         </button>
                       )}
                       <button
                         onClick={() => handleDelete(survey.survey_id)}
-                        className="px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 border border-rose-900/40 transition-colors cursor-pointer"
+                        className="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-400 hover:text-rose-200 hover:bg-rose-500/20 border border-rose-500/30 transition-colors cursor-pointer"
                         title="Delete Survey"
                       >
                         Delete
